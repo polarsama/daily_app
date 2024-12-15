@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// Placeholder for HomePage - you'll need to import your actual HomePage
 import 'package:daily_app/screens/HomePage.dart';
 
 void main() {
@@ -34,9 +35,21 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
 
   void _login() {
-    // Aquí implementarías la lógica de autenticación
-    print('Username: ${_usernameController.text}');
-    print('Password: ${_passwordController.text}');
+    // Basic login validation (you'd replace this with actual authentication)
+    if (_usernameController.text.isNotEmpty && _passwordController.text.isNotEmpty) {
+      // Navigate to HomePage
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const HomePage(), // Ensure HomePage is imported
+        ),
+      );
+    } else {
+      // Show error if fields are empty
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Por favor, ingrese usuario y contraseña')),
+      );
+    }
   }
 
   @override
@@ -155,13 +168,16 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _confirmPasswordController = TextEditingController();
 
   void _register() {
-    // Aquí implementarías la lógica de registro
     if (_passwordController.text == _confirmPasswordController.text) {
-      print('Nombre: ${_nameController.text}');
-      print('Email: ${_emailController.text}');
-      print('Contraseña: ${_passwordController.text}');
+      // Successful registration - return to login page
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const LoginPage(),
+        ),
+      );
     } else {
-      // Mostrar error de contraseñas no coinciden
+      // Show error if passwords don't match
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Las contraseñas no coinciden')),
       );
@@ -238,7 +254,12 @@ class _RegisterPageState extends State<RegisterPage> {
                 const SizedBox(height: 20),
                 TextButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LoginPage(),
+                      ),
+                    );
                   },
                   child: const Text(
                     '¿Ya tienes cuenta? Iniciar Sesión',
