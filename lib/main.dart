@@ -1,3 +1,4 @@
+import 'package:daily_app/screens/LoginPage.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -12,22 +13,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Daily App',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueGrey),
         useMaterial3: true,
       ),
-      home: MyWidget(),
+      home: LoginPage(),  //  home: LoginPage(),
     );
   }
 }
 
-class MyWidget extends StatelessWidget {
-  const MyWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder(
-      child: Text("data"),
-    );
-  }
-}
