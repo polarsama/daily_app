@@ -1,7 +1,5 @@
 import 'package:daily_app/screens/LoginPage.dart';
 import 'package:flutter/material.dart';
-import 'package:daily_app/screens/HomePage.dart';
-import 'package:daily_app/screens/NotesViews.dart';
 
 
 void main() {
