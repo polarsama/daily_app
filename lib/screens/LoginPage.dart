@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-// Placeholder for HomePage - you'll need to import your actual HomePage
 import 'package:daily_app/screens/HomePage.dart';
 
 void main() {
@@ -15,7 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Login App',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.blueGrey,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: const LoginPage(),
@@ -60,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Colors.blue, Colors.blueAccent],
+            colors: [Colors.blueGrey, Colors.blueAccent],
           ),
         ),
         child: Center(
@@ -95,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: _login,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
-                    foregroundColor: Colors.blue,
+                    foregroundColor: const Color.fromARGB(255, 9, 142, 252),
                     minimumSize: const Size(double.infinity, 50),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25),
@@ -192,7 +191,7 @@ class _RegisterPageState extends State<RegisterPage> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Colors.blue, Colors.blueAccent],
+            colors: [Colors.blueGrey, Colors.blueAccent],
           ),
         ),
         child: Center(
@@ -240,7 +239,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   onPressed: _register,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
-                    foregroundColor: Colors.blue,
+                    foregroundColor: const Color.fromARGB(255, 9, 142, 252),
                     minimumSize: const Size(double.infinity, 50),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25),
