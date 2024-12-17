@@ -17,7 +17,7 @@ class UserRegistration {
     return {
       'name': name,
       'email': email,
-      'password': password, // En la práctica, esto debe estar hasheado
+      'password': password, 
       'registrationDate': registrationDate?.toIso8601String() ?? DateTime.now().toIso8601String()
     };
   }
@@ -56,8 +56,8 @@ class UserLogin {
 
 // Modelo de Entrada de Diario
 class DiaryEntry {
-  final String? id; // Opcional, generado por la base de datos
-  final String userId; // ID del usuario que creó la entrada
+  final String? id; 
+  final String userId; 
   final DateTime date;
   final String title;
   final String content;

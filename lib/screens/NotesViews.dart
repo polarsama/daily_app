@@ -52,7 +52,7 @@ class GlobalMaterialLocalizations {
   static var delegate;
 }
 
-// Resto del código anterior
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -69,7 +69,7 @@ class _HomePageState extends State<HomePage> {
     SettingsPage(),
   ];
 
-   void _onItemTapped(int index) {
+  void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
@@ -194,8 +194,6 @@ class _NotesViewState extends State<NotesView> {
     }
   }
 
-  // Resto de los métodos anteriores...
-
   @override
   Widget build(BuildContext context) {
     // Intentar usar un formato de fecha con manejo de errores
@@ -231,18 +229,15 @@ class _NotesViewState extends State<NotesView> {
                       ],
                     ),
                   ),
-                  // Resto del código anterior...
                 ],
               ),
             ),
-            // Resto del método build...
           ],
         ),
       ),
     );
   }
 
-  // Métodos anteriores: _getWeekDays, _getEntriesForSelectedDate, etc.
 }
 
 class _getEntriesForSelectedDate {

@@ -34,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
 
   void _login() {
-    // Basic login validation (you'd replace this with actual authentication)
+    // Basic login validation 
     if (_usernameController.text.isNotEmpty && _passwordController.text.isNotEmpty) {
       // Navigate to HomePage
       Navigator.pushReplacement(
