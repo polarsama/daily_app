@@ -1,5 +1,6 @@
+import 'package:daily_app/theme/app_theme.dart';
 import 'package:flutter/material.dart';
-
+import 'package:google_fonts/google_fonts.dart';
 import 'package:daily_app/screens/HomePage.dart';
 
 void main() {
@@ -13,10 +14,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Login App',
-      theme: ThemeData(
-        primarySwatch: Colors.blueGrey,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.light, // You can change this to support dark mode
       home: const LoginPage(),
     );
   }
@@ -46,7 +46,12 @@ class _LoginPageState extends State<LoginPage> {
     } else {
       // Show error if fields are empty
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Por favor, ingrese usuario y contraseña')),
+        SnackBar(
+          content: Text(
+            'Por favor, ingrese usuario y contraseña',
+            style: GoogleFonts.dmSans(),
+          ),
+        ),
       );
     }
   }
@@ -55,11 +60,14 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Colors.blueGrey, Colors.blueAccent],
+            colors: [
+              AppTheme.lightBlue1Color,
+              AppTheme.lightBlue2Color,
+            ],
           ),
         ),
         child: Center(
@@ -68,13 +76,11 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(
+                Text(
                   'Iniciar Sesión',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                        color: Colors.white,
+                      ),
                 ),
                 const SizedBox(height: 30),
                 _buildTextField(
@@ -94,15 +100,18 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: _login,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
-                    foregroundColor: const Color.fromARGB(255, 9, 142, 252),
+                    foregroundColor: AppTheme.lightBlue2Color,
                     minimumSize: const Size(double.infinity, 50),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25),
                     ),
                   ),
-                  child: const Text(
+                  child: Text(
                     'Iniciar Sesión',
-                    style: TextStyle(fontSize: 18),
+                    style: GoogleFonts.dmSans(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -115,9 +124,12 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     );
                   },
-                  child: const Text(
+                  child: Text(
                     '¿No tienes cuenta? Regístrate',
-                    style: TextStyle(color: Colors.white),
+                    style: GoogleFonts.dmSans(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
@@ -137,10 +149,10 @@ class _LoginPageState extends State<LoginPage> {
     return TextField(
       controller: controller,
       obscureText: obscureText,
-      style: const TextStyle(color: Colors.white),
+      style: GoogleFonts.dmSans(color: Colors.white),
       decoration: InputDecoration(
         hintText: hintText,
-        hintStyle: const TextStyle(color: Colors.white70),
+        hintStyle: GoogleFonts.dmSans(color: Colors.white70),
         prefixIcon: Icon(icon, color: Colors.white),
         filled: true,
         fillColor: Colors.white.withOpacity(0.2),
@@ -178,7 +190,12 @@ class _RegisterPageState extends State<RegisterPage> {
     } else {
       // Show error if passwords don't match
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Las contraseñas no coinciden')),
+        SnackBar(
+          content: Text(
+            'Las contraseñas no coinciden',
+            style: GoogleFonts.dmSans(),
+          ),
+        ),
       );
     }
   }
@@ -187,11 +204,14 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Colors.blueGrey, Colors.blueAccent],
+            colors: [
+              AppTheme.lightBlue1Color,
+              AppTheme.lightBlue2Color,
+            ],
           ),
         ),
         child: Center(
@@ -200,13 +220,11 @@ class _RegisterPageState extends State<RegisterPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(
+                Text(
                   'Registro',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                        color: Colors.white,
+                      ),
                 ),
                 const SizedBox(height: 30),
                 _buildTextField(
@@ -239,15 +257,18 @@ class _RegisterPageState extends State<RegisterPage> {
                   onPressed: _register,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
-                    foregroundColor: const Color.fromARGB(255, 9, 142, 252),
+                    foregroundColor: AppTheme.lightBlue2Color,
                     minimumSize: const Size(double.infinity, 50),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25),
                     ),
                   ),
-                  child: const Text(
+                  child: Text(
                     'Registrarse',
-                    style: TextStyle(fontSize: 18),
+                    style: GoogleFonts.dmSans(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -260,9 +281,12 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                     );
                   },
-                  child: const Text(
+                  child: Text(
                     '¿Ya tienes cuenta? Iniciar Sesión',
-                    style: TextStyle(color: Colors.white),
+                    style: GoogleFonts.dmSans(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
@@ -282,10 +306,10 @@ class _RegisterPageState extends State<RegisterPage> {
     return TextField(
       controller: controller,
       obscureText: obscureText,
-      style: const TextStyle(color: Colors.white),
+      style: GoogleFonts.dmSans(color: Colors.white),
       decoration: InputDecoration(
         hintText: hintText,
-        hintStyle: const TextStyle(color: Colors.white70),
+        hintStyle: GoogleFonts.dmSans(color: Colors.white70),
         prefixIcon: Icon(icon, color: Colors.white),
         filled: true,
         fillColor: Colors.white.withOpacity(0.2),
