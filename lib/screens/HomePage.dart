@@ -1,3 +1,4 @@
+import 'package:daily_app/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'loginpage.dart';
 import 'notesviews.dart';
@@ -23,9 +24,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blueGrey[100],
+      backgroundColor: AppTheme.lightBlue1,
       appBar: AppBar(
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: AppTheme.lightBlue2,
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
@@ -70,7 +71,7 @@ class _HomePageState extends State<HomePage> {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              maxLines: 3,
+              maxLines: 10,
             ),
             const SizedBox(height: 20),
             Row(
