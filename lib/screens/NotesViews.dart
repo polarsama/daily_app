@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 // Modelo de entrada de diario
 class DiaryEntry {
@@ -15,77 +14,59 @@ class DiaryEntry {
     required this.title, 
     required this.content
   });
-
-  // Constructor desde mapa (útil para mapear desde base de datos)
-  factory DiaryEntry.fromMap(Map<String, dynamic> map) {
-    return DiaryEntry(
-      id: map['id'],
-      date: DateTime.parse(map['date']),
-      title: map['title'],
-      content: map['content']
-    );
-  }
-}
-
-// Servicio de Base de Datos (interfaz abstracta)
-abstract class DiaryEntryService {
-  Future<List<DiaryEntry>> getEntriesByDate(DateTime date);
-}
-
-// Provider de Entradas de Diario
-class DiaryEntryProvider extends ChangeNotifier {
-  final DiaryEntryService _service;
-  List<DiaryEntry> _entries = [];
-  DateTime _selectedDate = DateTime.now();
-  bool _isLoading = false;
-
-  DiaryEntryProvider(this._service);
-
-  List<DiaryEntry> get entries => _entries;
-  DateTime get selectedDate => _selectedDate;
-  bool get isLoading => _isLoading;
-
-  Future<void> fetchEntriesForDate(DateTime date) async {
-    _isLoading = true;
-    _selectedDate = date;
-    notifyListeners();
-
-    try {
-      _entries = await _service.getEntriesByDate(date);
-      _isLoading = false;
-      notifyListeners();
-    } catch (e) {
-      _isLoading = false;
-      _entries = [];
-      notifyListeners();
-      // Manejar el error como prefieras (log, mostrar mensaje, etc)
-      print('Error al cargar entradas: $e');
-    }
-  }
 }
 
 class NotesView extends StatefulWidget {
-  const NotesView({super.key});
+  const NotesView({Key? key}) : super(key: key);
 
   @override
   _NotesViewState createState() => _NotesViewState();
 }
 
 class _NotesViewState extends State<NotesView> {
+  // Datos mock de entradas de diario
+  final List<DiaryEntry> _mockEntries = [
+    DiaryEntry(
+      id: 1,
+      date: DateTime(2024, 2, 15),
+      title: 'Un día increíble',
+      content: 'Hoy fue un día maravilloso...'
+    ),
+    DiaryEntry(
+      id: 2,
+      date: DateTime(2024, 2, 15),
+      title: 'Reflexiones',
+      content: 'Pensando en mis metas futuras...'
+    ),
+    DiaryEntry(
+      id: 3,
+      date: DateTime(2024, 2, 16),
+      title: 'Aventura en la ciudad',
+      content: 'Salí a explorar nuevos lugares...'
+    ),
+  ];
+
+  late DateTime _selectedDate;
+
   @override
   void initState() {
     super.initState();
-    // Cargar entradas para la fecha actual al iniciar
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<DiaryEntryProvider>(context, listen: false)
-          .fetchEntriesForDate(DateTime.now());
-    });
+    _selectedDate = DateTime.now();
   }
 
   // Obtener días de la semana
   List<DateTime> _getWeekDays(DateTime selectedDate) {
     final weekStart = selectedDate.subtract(Duration(days: selectedDate.weekday - 1));
     return List.generate(7, (index) => weekStart.add(Duration(days: index)));
+  }
+
+  // Filtrar entradas por día
+  List<DiaryEntry> _getEntriesForSelectedDate() {
+    return _mockEntries.where((entry) => 
+      entry.date.year == _selectedDate.year &&
+      entry.date.month == _selectedDate.month &&
+      entry.date.day == _selectedDate.day
+    ).toList();
   }
 
   // Mostrar detalles de la entrada
@@ -131,6 +112,9 @@ class _NotesViewState extends State<NotesView> {
 
   @override
   Widget build(BuildContext context) {
+    final weekDays = _getWeekDays(_selectedDate);
+    final dayEntries = _getEntriesForSelectedDate();
+
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -140,154 +124,109 @@ class _NotesViewState extends State<NotesView> {
               margin: const EdgeInsets.all(8),
               child: Column(
                 children: [
-                  // Header del calendario
-                  Consumer<DiaryEntryProvider>(
-                    builder: (context, provider, child) {
-                      final selectedDate = provider.selectedDate;
-                      final weekDays = _getWeekDays(selectedDate);
-
-                      return Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          DateFormat('MMMM yyyy', 'es').format(_selectedDate),
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        Icon(Icons.calendar_today),
+                      ],
+                    ),
+                  ),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: weekDays.map((day) {
+                        final isSelected = day.year == _selectedDate.year &&
+                            day.month == _selectedDate.month &&
+                            day.day == _selectedDate.day;
+                        
+                        return GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _selectedDate = day;
+                            });
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            margin: const EdgeInsets.symmetric(horizontal: 4),
+                            decoration: BoxDecoration(
+                              color: isSelected ? Colors.blue[100] : null,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Column(
                               children: [
                                 Text(
-                                  DateFormat('MMMM yyyy', 'es').format(selectedDate),
-                                  style: Theme.of(context).textTheme.titleLarge,
+                                  DateFormat('EEE', 'es').format(day),
+                                  style: const TextStyle(fontSize: 12),
                                 ),
-                                Icon(Icons.calendar_today),
+                                Text(
+                                  day.day.toString(),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: isSelected ? Colors.blue : null,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
-                          SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              children: weekDays.map((day) {
-                                final isSelected = day.year == selectedDate.year &&
-                                    day.month == selectedDate.month &&
-                                    day.day == selectedDate.day;
-                                
-                                return GestureDetector(
-                                  onTap: () {
-                                    provider.fetchEntriesForDate(day);
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.all(8),
-                                    margin: const EdgeInsets.symmetric(horizontal: 4),
-                                    decoration: BoxDecoration(
-                                      color: isSelected ? Colors.blue[100] : null,
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          DateFormat('EEE', 'es').format(day),
-                                          style: const TextStyle(fontSize: 12),
-                                        ),
-                                        Text(
-                                          day.day.toString(),
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: isSelected ? Colors.blue : null,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              }).toList(),
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                        ],
-                      );
-                    },
+                        );
+                      }).toList(),
+                    ),
                   ),
+                  const SizedBox(height: 8),
                 ],
               ),
             ),
 
             // Lista de Entradas
             Expanded(
-              child: Consumer<DiaryEntryProvider>(
-                builder: (context, provider, child) {
-                  if (provider.isLoading) {
-                    return Center(child: CircularProgressIndicator());
-                  }
-
-                  final dayEntries = provider.entries;
-
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Entradas del ${DateFormat('d MMMM', 'es').format(provider.selectedDate)}',
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                        const SizedBox(height: 8),
-                        Expanded(
-                          child: dayEntries.isEmpty
-                              ? Center(
-                                  child: Text(
-                                    'No hay entradas para este día',
-                                    style: Theme.of(context).textTheme.titleMedium,
-                                  ),
-                                )
-                              : ListView.builder(
-                                  itemCount: dayEntries.length,
-                                  itemBuilder: (context, index) {
-                                    final entry = dayEntries[index];
-                                    return Card(
-                                      margin: const EdgeInsets.symmetric(vertical: 4),
-                                      child: ListTile(
-                                        title: Text(entry.title),
-                                        trailing: Icon(Icons.file_present),
-                                        onTap: () => _showEntryDetails(entry),
-                                      ),
-                                    );
-                                  },
-                                ),
-                        ),
-                      ],
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Entradas del ${DateFormat('d MMMM', 'es').format(_selectedDate)}',
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
-                  );
-                },
+                    const SizedBox(height: 8),
+                    Expanded(
+                      child: dayEntries.isEmpty
+                          ? Center(
+                              child: Text(
+                                'No hay entradas para este día',
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
+                            )
+                          : ListView.builder(
+                              itemCount: dayEntries.length,
+                              itemBuilder: (context, index) {
+                                final entry = dayEntries[index];
+                                return Card(
+                                  margin: const EdgeInsets.symmetric(vertical: 4),
+                                  child: ListTile(
+                                    title: Text(entry.title),
+                                    trailing: Icon(Icons.file_present),
+                                    onTap: () => _showEntryDetails(entry),
+                                  ),
+                                );
+                              },
+                            ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
         ),
       ),
+      // Agregar el bottomNavigationBar según tu diseño
+      // bottomNavigationBar: TuNavBar(),
     );
-  }
-}
-
-// Ejemplo de implementación de servicio (debes adaptarlo a tu base de datos)
-class FirebaseDiaryEntryService implements DiaryEntryService {
-  @override
-  Future<List<DiaryEntry>> getEntriesByDate(DateTime date) async {
-    // Implementa la lógica para obtener entradas de tu base de datos
-    // Este es solo un ejemplo, debes reemplazarlo con tu implementación real
-    // Por ejemplo, con Firestore, SQLite, etc.
-    try {
-      // Ejemplo con una consulta ficticia
-      // final querySnapshot = await FirebaseFirestore.instance
-      //     .collection('diary_entries')
-      //     .where('date', isEqualTo: date.toIso8601String().split('T')[0])
-      //     .get();
-      
-      // return querySnapshot.docs
-      //     .map((doc) => DiaryEntry.fromMap(doc.data()))
-      //     .toList();
-
-      // Retorno temporal para compilación
-      return [];
-    } catch (e) {
-      print('Error obteniendo entradas: $e');
-      return [];
-    }
   }
 }

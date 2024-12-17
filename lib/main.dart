@@ -1,6 +1,6 @@
-import 'package:daily_app/screens/LoginPage.dart';
 import 'package:flutter/material.dart';
-
+import 'theme/app_theme.dart';
+import 'package:daily_app/screens/LoginPage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,11 +15,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Daily App',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueGrey),
-        useMaterial3: true,
-      ),
-      home: LoginPage(),  //  home: LoginPage(),
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.light,  
+      home: LoginPage(),
     );
   }
 }

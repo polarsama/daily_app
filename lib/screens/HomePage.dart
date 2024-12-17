@@ -1,7 +1,7 @@
-// home_page.dart
 import 'package:flutter/material.dart';
 import 'loginpage.dart';
-//import 'notasviews.dart'; // Asume que tienes esta página
+import 'notesviews.dart';
+//import 'configpage.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,27 +13,11 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final TextEditingController _tituloController = TextEditingController();
   final TextEditingController _contenidoController = TextEditingController();
-  int _selectedIndex = 0;
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-
-    switch (index) {
-      case 0:
-        // Ya estamos en HomePage, no hacemos nada
-        break;
-      case 1:
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(builder: (context) ),
-        // );
-        break;
-      case 2:
-        // Aquí podrías agregar la navegación para el tercer icono
-        break;
-    }
+  void _navigateTo(Widget page) {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => page),
+    );
   }
 
   @override
@@ -46,7 +30,6 @@ class _HomePageState extends State<HomePage> {
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () {
-              // Cerrar sesión y volver a LoginPage
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => const LoginPage()),
@@ -126,13 +109,25 @@ class _HomePageState extends State<HomePage> {
             label: 'Notas',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.menu),
-            label: 'Menú',
+            icon: Icon(Icons.settings),
+            label: 'Configuración',
           ),
         ],
-        currentIndex: _selectedIndex,
+        currentIndex: 0,
         selectedItemColor: Colors.blue,
-        onTap: _onItemTapped,
+        onTap: (index) {
+          switch (index) {
+            case 0:
+              // Estamos en HomePage, no hacemos nada
+              break;
+            case 1:
+              _navigateTo(const NotesView());
+              break;
+            case 2:
+              //_navigateTo(const ConfigPage());
+              break;
+          }
+        },
       ),
     );
   }
